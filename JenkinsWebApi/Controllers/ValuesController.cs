@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace JenkinsWebApi.Controllers
 {
@@ -10,11 +11,23 @@ namespace JenkinsWebApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private IOptions<WebAppSetting> _options;
+        public ValuesController(IOptions<WebAppSetting> options)
+        {
+            _options = options;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2","value3","value4" };
+            return new string[] { "value1", "value2", "value3", "value4" };
+        }
+
+        [HttpGet("env")]
+        public ActionResult<string> Enviroment()
+        {
+            return _options.Value.Host;
         }
 
         // GET api/values/5
